@@ -1,10 +1,10 @@
 import { extractNumbers, isNumberToken, normalize } from './frenchNumbers'
 import type { Player, VoiceAction } from './types'
 
-const BUST_WORDS = new Set(['bust', 'buste', 'bouste', 'bus', 'rate', 'rates', 'rater', 'perdu', 'perd', 'saute', 'explose', 'elimine'])
-const ADD_WORDS = new Set(['plus', 'ajoute', 'ajouter', 'rajoute', 'rajouter', 'ajout'])
-const CLEAR_WORDS = new Set(['efface', 'effacer', 'reinitialise', 'vide'])
-const FILLER = new Set(['et', 'a', 'au', 'pour', 'de', 'd', 'le', 'la', 'les', 'ont', 'fait', 'fais', 'avec', 'points', 'point', 'pts', 'score', 'un', 'il', 'elle'])
+export const BUST_WORDS = new Set(['bust', 'buste', 'bouste', 'bus', 'rate', 'rates', 'rater', 'perdu', 'perd', 'saute', 'explose', 'elimine'])
+export const ADD_WORDS = new Set(['plus', 'ajoute', 'ajouter', 'rajoute', 'rajouter', 'ajout'])
+export const CLEAR_WORDS = new Set(['efface', 'effacer', 'reinitialise', 'vide'])
+export const FILLER = new Set(['et', 'a', 'au', 'pour', 'de', 'd', 'le', 'la', 'les', 'ont', 'fait', 'fais', 'avec', 'points', 'point', 'pts', 'score', 'un', 'il', 'elle'])
 
 const GLOBALS: { re: RegExp; action: VoiceAction }[] = [
   { re: /\b(annule(r)? la derniere manche|supprime(r)? la derniere manche|retour en arriere manche)\b/, action: { type: 'undoRound' } },
@@ -21,11 +21,15 @@ function levenshtein(a: string, b: string): number {
   return dp[a.length]![b.length]!
 }
 
-function matchPlayer(token: string, keys: { id: string; key: string }[]): string | null {
+export const SKYJO_WORDS = new Set(['fini', 'finit', 'finie', 'ferme', 'clos', 'skyjo', 'moins', 'negatif', 'termine'])
+
+export const playerKeys = (players: Player[]) => players.map(p => ({ id: p.id, key: normalize(p.name).split(' ')[0] ?? '' }))
+
+export function matchPlayer(token: string, keys: { id: string; key: string }[]): string | null {
   const exact = keys.filter(k => k.key === token)
   if (exact.length === 1) return exact[0]!.id
   if (exact.length > 1) return null
-  const reserved = isNumberToken(token) || BUST_WORDS.has(token) || ADD_WORDS.has(token) || FILLER.has(token) || token.startsWith('flip')
+  const reserved = isNumberToken(token) || BUST_WORDS.has(token) || ADD_WORDS.has(token) || FILLER.has(token) || SKYJO_WORDS.has(token) || token.startsWith('flip')
   if (reserved || token.length < 4) return null
   let best: string | null = null
   let bestDist = Infinity
@@ -90,7 +94,7 @@ export function parseVoice(text: string, players: Player[]): VoiceAction[] {
   globals.sort((a, b) => (a.type === 'nextRound' ? 1 : 0) - (b.type === 'nextRound' ? 1 : 0))
 
   const tokens = norm ? norm.split(' ') : []
-  const keys = players.map(p => ({ id: p.id, key: normalize(p.name).split(' ')[0] ?? '' }))
+  const keys = playerKeys(players)
   const mentions: { idx: number; id: string }[] = []
   tokens.forEach((t, idx) => {
     const id = matchPlayer(t, keys)

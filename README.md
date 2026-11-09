@@ -1,4 +1,4 @@
-# Flip 7 – Scores à la voix
+# Scores à la voix – Flip 7 & Skyjo
 
 Application 100 % front-end (Nuxt 3, SPA) pour gérer les scores du jeu **Flip 7**, avec reconnaissance vocale en français (Web Speech API – Chrome, Edge, Safari). Les données sont sauvegardées dans le navigateur (`localStorage`).
 
@@ -31,3 +31,10 @@ Un champ texte permet de tester les mêmes commandes sans micro. Le micro exige 
 - **Tableau** : tous les joueurs sur un écran (manches passées, manche en cours, total). Touchez un joueur pour saisir sa main.
 - **Cartes** : touchez les cartes 0-12, les modificateurs +2…+10 et ×2. Un **doublon = raté** et **7 cartes différentes = Flip 7 (+15)** sont détectés automatiquement.
 - Voix : « Alice cartes 3 5 12 », « Bob fois deux », en plus des commandes ci-dessus.
+
+## Mode Skyjo
+- Écran d'accueil pour choisir le jeu (chaque partie est sauvegardée séparément).
+- Comptez les cartes restantes de -2 à 12 (12 cartes max), ou saisissez le total ; les scores négatifs sont gérés.
+- **🏁 A fini la manche** : si le finisseur n'a pas le score *strictement* le plus bas, son score (s'il est positif) est **doublé** automatiquement.
+- La partie se termine quand un joueur atteint 100 (50/100/150) ; **le moins de points gagne**.
+- Voix : « Alice 12 », « Bob moins trois », « Claire 25 a fini », « manche suivante », « annule »…

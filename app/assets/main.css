@@ -171,3 +171,17 @@ tr.lead .tot b::after { content: ' 👑'; font-size: .8rem; }
 .sum strong { font-size: 1.6rem; }
 .manual { margin: 6px 0; font-size: .85rem; color: var(--muted); } .manual summary { cursor: pointer; margin-bottom: 6px; }
 .pf { display: flex; gap: 8px; margin-top: 8px; } .pf .primary { flex: 1; padding: .8rem; } .pf .ghost { border-style: solid; }
+
+/* ---------- Accueil multi-jeux & Skyjo ---------- */
+.home { padding: 48px 0; display: grid; gap: 14px; }
+.home .logo { margin-bottom: 0; }
+.tile { display: grid; gap: 6px; text-align: left; padding: 20px; border-radius: 20px; border: 1px solid var(--line); background: var(--bg2); }
+.tile .logo { text-align: left; font-size: 2.2rem; } .tile small { color: var(--muted); } .tile em { color: var(--good); font-style: normal; font-weight: 700; }
+.tile.flip { border-left: 6px solid var(--accent); } .tile.sky { border-left: 6px solid #4fc3f7; }
+.logo.sj span { background: #4fc3f7; color: #04283a; }
+.setup .back { width: auto; margin: 0 0 8px; padding: .4rem .8rem; }
+.pad.p5 { grid-template-columns: repeat(5, 1fr); }
+.num.negc { background: #1f4a66; } .num.negc.has { background: #2c7bb0; }
+.card.neg { background: #b9e6ff; }
+.grid td sup { font-size: .6rem; margin-left: 2px; }
+.grid .rd.b { color: var(--bad); font-weight: 700; } .grid .rd.f { color: var(--good); }
