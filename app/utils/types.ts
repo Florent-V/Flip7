@@ -46,3 +46,29 @@ export type VoiceAction =
 
 export const FLIP7_BONUS = 15
 export const FLIP7_CARDS = 7
+
+// ---------------- Skyjo ----------------
+export interface SkyjoDraft {
+  cards: number[] // cartes comptées, -2..12
+  manual: number | null // total saisi à la main / à la voix
+  ender: boolean // a retourné sa dernière carte et fini la manche
+}
+export interface SkyjoRoundEntry { raw: number; score: number; doubled: boolean; ender: boolean; draft: SkyjoDraft }
+export type SkyjoRound = Record<string, SkyjoRoundEntry>
+export interface SkyjoState {
+  players: Player[]
+  target: number
+  rounds: SkyjoRound[]
+  draft: Record<string, SkyjoDraft>
+  started: boolean
+  dismissedWin: boolean
+}
+export type SkyjoAction =
+  | { type: 'set'; playerId: string; points: number }
+  | { type: 'add'; playerId: string; points: number }
+  | { type: 'ender'; playerId: string }
+  | { type: 'clear'; playerId: string }
+  | { type: 'nextRound' }
+  | { type: 'undo' }
+  | { type: 'undoRound' }
+export const SKYJO_CARDS_PER_HAND = 12
