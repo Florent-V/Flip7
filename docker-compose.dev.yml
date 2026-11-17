@@ -1,0 +1,16 @@
+# Dev : Nuxt dev server + HMR, code monté en volume
+services:
+  web:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "${PORT:-3000}:3000"
+    volumes:
+      - .:/app
+      - node_modules:/app/node_modules  # garde les deps de l'image
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+
+volumes:
+  node_modules:

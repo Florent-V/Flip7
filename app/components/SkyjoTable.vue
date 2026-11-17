@@ -6,27 +6,26 @@
           <tr>
             <th class="stick-l">Joueur</th>
             <th v-for="(_, i) in state.rounds" :key="i" class="rd">M{{ i + 1 }}</th>
-            <th class="cur">En cours</th>
-            <th class="stick-r">Total</th>
+            <th class="stick-r">En cours</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(p, i) in state.players" :key="p.id" :class="{ lead: rank[p.id] === 1 && state.rounds.length > 0, flash: touched.includes(p.id) }"
               :style="{ '--hue': (i * 47) % 360 }" @click="sheet = p.id">
-            <td class="stick-l name"><i class="dot" /><span>{{ p.name }}</span></td>
+            <td class="stick-l who">
+              <span class="pname"><i class="dot" />{{ p.name }}</span>
+              <b class="ptot">{{ totals[p.id] }}</b><small class="goal">/ {{ state.target }}</small>
+              <em class="pbar"><i :style="{ width: Math.min(100, Math.max(0, ((totals[p.id] ?? 0) / state.target) * 100)) + '%' }" /></em>
+            </td>
             <td v-for="(r, k) in state.rounds" :key="k" class="rd" :class="{ b: r[p.id]?.doubled, f: r[p.id]?.ender && !r[p.id]?.doubled }">
               {{ r[p.id]?.score ?? 0 }}<sup v-if="r[p.id]?.doubled">×2</sup><sup v-else-if="r[p.id]?.ender">🏁</sup>
             </td>
-            <td class="cur" :class="{ b: live[p.id]?.doubled }">
+            <td class="stick-r cur" :class="{ b: live[p.id]?.doubled }">
               <template v-if="live[p.id]?.filled">
                 <b>{{ live[p.id]!.score }}</b>
-                <small>{{ game.entry(p.id).ender ? (live[p.id]!.doubled ? '🏁 doublé ×2' : '🏁 a fini') : `${game.entry(p.id).cards.length || ''}${game.entry(p.id).cards.length ? ' cartes' : 'manuel'}` }}</small>
+                <small>{{ game.entry(p.id).ender ? (live[p.id]!.doubled ? '🏁 ×2' : '🏁 fini') : `${game.entry(p.id).cards.length || ''}${game.entry(p.id).cards.length ? ' cartes' : 'manuel'}` }}</small>
               </template>
               <span v-else class="plus">＋</span>
-            </td>
-            <td class="stick-r tot">
-              <b>{{ totals[p.id] }}</b>
-              <em class="pbar"><i :style="{ width: Math.min(100, Math.max(0, ((totals[p.id] ?? 0) / state.target) * 100)) + '%' }" /></em>
             </td>
           </tr>
         </tbody>

@@ -1,0 +1,10 @@
+# Production : site statique servi par nginx
+services:
+  web:
+    build:
+      context: .
+      target: prod
+    image: flip7-scores:latest
+    ports:
+      - "${PORT:-8080}:80"
+    restart: unless-stopped

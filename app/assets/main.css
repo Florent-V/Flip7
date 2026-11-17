@@ -107,32 +107,39 @@ td.b { color: var(--bad); } td.f { color: var(--good); font-weight: 700; }
 .podium li:first-child { background: #ffcc3322; font-weight: 800; }
 .actions { display: flex; gap: 8px; } .actions button { flex: 1; }
 
-/* ---------- Tableau compact ---------- */
+/* ---------- Tableau : joueurs en lignes, manches en colonnes ---------- */
+/* Colonnes de manches à largeur FIXE (jamais écrasées) : seule la zone centrale défile.
+   Joueur+total (gauche) et manche en cours (droite) restent épinglés. */
 .tablewrap { margin: 4px -16px 0; }
 .scroller { overflow-x: auto; }
 .grid { width: 100%; border-collapse: separate; border-spacing: 0; font-variant-numeric: tabular-nums; }
-.grid th { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); padding: 6px 8px; background: var(--bg); }
-.grid td { padding: 0 8px; height: 52px; text-align: center; border-top: 1px solid #ffffff10; background: transparent; white-space: nowrap; }
+.grid th { font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 7px 0; background: var(--bg); font-weight: 600; white-space: nowrap; }
+.grid td { height: 60px; text-align: center; border-top: 1px solid #ffffff12; white-space: nowrap; }
 .grid tbody tr { cursor: pointer; transition: background .2s; }
-.grid tbody tr:active { background: #ffffff10; }
+.grid tbody tr:nth-child(odd) { background: #ffffff06; }
+.grid tbody tr:active { background: #ffffff12; }
 .grid tr.flash td { animation: rowflash 1.2s ease-out; }
 @keyframes rowflash { 0% { background: hsl(var(--hue) 75% 50% / .55); } 100% { background: transparent; } }
-.stick-l { position: sticky; left: 0; z-index: 2; background: var(--bg) !important; text-align: left !important; min-width: 104px; max-width: 120px; padding-left: 16px !important; }
-.stick-r { position: sticky; right: 0; z-index: 2; background: var(--bg) !important; min-width: 72px; padding-right: 16px !important; box-shadow: -8px 0 12px -8px #000a; }
-.grid .name { display: flex; align-items: center; gap: 8px; font-weight: 700; }
-.grid .name span { overflow: hidden; text-overflow: ellipsis; }
-.grid .dot { width: 10px; height: 10px; border-radius: 50%; background: hsl(var(--hue) 75% 62%); flex: none; }
-.rd { color: var(--muted); min-width: 44px; }
-.cur { min-width: 76px; background: #8b6cff14 !important; }
-.cur b { display: block; font-size: 1.15rem; line-height: 1.1; }
-.cur small { display: block; font-size: .65rem; color: var(--muted); }
-.cur .plus { color: var(--violet); font-size: 1.3rem; }
-.cur.b { color: var(--bad); } .cur.f { color: var(--good); }
-.tot b { font-size: 1.3rem; display: block; color: hsl(var(--hue) 75% 66%); line-height: 1.1; }
+.rd { width: 48px; min-width: 48px; color: var(--muted); font-size: .95rem; }
+.rd.b { color: var(--bad); } .rd.f { color: var(--good); font-weight: 700; }
+.grid td sup { font-size: .55rem; margin-left: 1px; }
+.stick-l, .stick-r { position: sticky; z-index: 2; background: var(--bg) !important; }
+.stick-l { left: 0; width: 112px; min-width: 112px; max-width: 112px; text-align: left !important; padding: 6px 8px 6px 12px !important; box-shadow: 8px 0 12px -8px #000a; border-left: 4px solid hsl(var(--hue, 260) 75% 62%); }
+thead .stick-l { border-left-color: transparent; }
+.stick-r { right: 0; width: 76px; min-width: 76px; box-shadow: -8px 0 12px -8px #000a; background: #2a2150 !important; }
+.pname { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: .95rem; overflow: hidden; }
+.pname { white-space: nowrap; text-overflow: ellipsis; }
+.grid .dot { display: none; }
+tr.lead .pname::after { content: '👑'; font-size: .75rem; }
+.ptot { font-size: 1.35rem; line-height: 1.15; color: hsl(var(--hue) 75% 66%); }
+.goal { color: var(--muted); font-size: .65rem; margin-left: 2px; }
 .pbar { display: block; height: 4px; background: #ffffff18; border-radius: 9px; overflow: hidden; margin-top: 3px; }
 .pbar i { display: block; height: 100%; background: hsl(var(--hue) 75% 62%); transition: width .5s; }
-tr.lead .tot b::after { content: ' 👑'; font-size: .8rem; }
-.tip { text-align: center; color: var(--muted); font-size: .8rem; margin: 8px 16px; }
+.cur b { display: block; font-size: 1.2rem; line-height: 1.1; }
+.cur small { display: block; font-size: .62rem; color: var(--muted); }
+.cur .plus { color: var(--violet); font-size: 1.5rem; }
+.cur.b { color: var(--bad); } .cur.f { color: var(--good); }
+.tip { text-align: center; color: var(--muted); font-size: .8rem; margin: 10px 16px; }
 .spacer { height: 120px; }
 
 /* ---------- Feuille de saisie ---------- */
@@ -183,5 +190,4 @@ tr.lead .tot b::after { content: ' 👑'; font-size: .8rem; }
 .pad.p5 { grid-template-columns: repeat(5, 1fr); }
 .num.negc { background: #1f4a66; } .num.negc.has { background: #2c7bb0; }
 .card.neg { background: #b9e6ff; }
-.grid td sup { font-size: .6rem; margin-left: 2px; }
 .grid .rd.b { color: var(--bad); font-weight: 700; } .grid .rd.f { color: var(--good); }
