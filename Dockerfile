@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-ARG NODE_VERSION=22
+ARG NODE_VERSION=22.23.5
 
 # ---- base: deps installées ----
 FROM node:${NODE_VERSION}-alpine AS deps
@@ -21,7 +21,7 @@ COPY . .
 RUN npm run generate
 
 # ---- prod: nginx sert .output/public ----
-FROM nginx:1-alpine AS prod
+FROM nginx:1.30.7-alpine AS prod
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/.output/public /usr/share/nginx/html
 EXPOSE 80

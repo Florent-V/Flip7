@@ -4,7 +4,7 @@ COMPOSE_PROD := docker compose -f docker-compose.yml
 
 .PHONY: help install dev test build preview \
         docker-dev docker-dev-down docker-dev-logs docker-dev-test docker-dev-shell \
-        docker-build docker-up docker-down docker-logs docker-restart \
+        docker-build docker-update audit docker-up docker-down docker-logs docker-restart \
         prod clean
 
 help: ## Affiche l'aide
@@ -44,10 +44,19 @@ docker-dev-shell: ## Shell dans le conteneur dev
 
 ## ---- Docker PROD ----
 docker-build: ## Build l'image prod (nginx + site statique)
-	$(COMPOSE_PROD) build
+	$(COMPOSE_PROD) build --pull
 
 docker-up: ## Démarre la prod en arrière-plan (http://localhost:8080)
-	$(COMPOSE_PROD) up -d --build
+	$(COMPOSE_PROD) build --pull
+	$(COMPOSE_PROD) up -d
+
+docker-update: ## Met à jour nginx (rebuild sans cache + --pull) et redéploie
+	$(COMPOSE_PROD) build --pull --no-cache
+	$(COMPOSE_PROD) up -d
+	@docker compose -f docker-compose.yml exec web nginx -v
+
+audit: ## Audit npm (prod, niveau high+)
+	npm audit --omit=dev --audit-level=high
 
 docker-down: ## Stoppe la prod
 	$(COMPOSE_PROD) down

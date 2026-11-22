@@ -4,6 +4,8 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: '0 6 * * 1' # hebdo : détecte CVE nginx/npm sans attendre un commit
 
 permissions:
   contents: read
@@ -26,6 +28,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm test
       - run: npm run generate
 
@@ -43,5 +46,6 @@ jobs:
           context: .
           target: prod
           push: false
+          pull: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
